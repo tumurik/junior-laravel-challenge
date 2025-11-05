@@ -155,13 +155,27 @@ Laravel's Eloquent ORM (Object-Relational Mapping) lets you work with database t
 **Helpful docs:**
 - [Eloquent Basics](https://laravel.com/docs/10.x/eloquent)
 - [Query Builder](https://laravel.com/docs/10.x/queries)
-- [Date Comparisons](https://laravel.com/docs/10.x/queries#where-clauses)
+- [Carbon Date Library](https://carbon.nesbot.com/docs/) - For working with dates (comparison, addition, etc.)
 
 ### Percentage Calculation
 How do you calculate what percentage of todos are completed? Sounds like a simple math, doesn't it?
 
 ### Displaying a Progress Bar
 Bootstrap (already included) has built-in [progress bar components](https://getbootstrap.com/docs/5.3/components/progress/).
+
+### Debugging Tip
+Use `dd()` (dump and die) to inspect variables while coding. It's Laravel's most helpful debugging tool!
+
+```php
+// Example: See what data you're getting
+$todos = Todo::all();
+dd($todos); // This will display the data and stop execution
+
+// You can also dump multiple things at once
+dd($todos, $totalTodos, $completedTodos);
+```
+
+Once you're done debugging, just remove the `dd()` call and your code will run normally.
 
 ---
 

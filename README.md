@@ -23,6 +23,7 @@ The app already has a working Todo list. **Your job is to add a new "Summary" pa
 - Download and install from [herd.laravel.com](https://herd.laravel.com)
 - Includes PHP, Composer, and automatic site management
 - **Important:** Set PHP version to 8.2 in Herd settings
+- Terminal should be restarted after Herd installation, if opened
 
 ### 1. Clone This Repository
 
@@ -45,28 +46,40 @@ composer install
 ### 3. Environment Setup
 ```bash
 # Copy environment file
-cp .env.example .env
+# Windows:
+copy .env.example .env
+# Mac/Linux:
+# cp .env.example .env
 
 # Generate app key (required for Laravel)
 php artisan key:generate
 ```
 
-The project uses **SQLite** (database file already included). No additional database setup needed!
+### 4. Create SQLite Database File
 
-### 4. Run Migrations & Seed Data
+The project uses SQLite for the database. You need to create an empty database file before running migrations:
+
+```bash
+# Windows:
+type nul > database\database.sqlite
+# Mac/Linux:
+# touch database/database.sqlite
+```
+
+### 5. Run Migrations & Seed Data
 ```bash
 php artisan migrate:fresh --seed
 ```
 
 This creates the todos table and adds sample data (some with due dates in the next 30 days).
 
-### 5. Start the Development Server
+### 6. Start the Development Server
 
-In Herd, click "Park" and select your projects directory (the one containing this project).
+In Herd, select "Sites", click "Add" and select your projects directory (the one containing this project).
 
 Access your site at: `http://junior-laravel-challenge.test`
 
-### 6. Verify Everything Works
+### 7. Verify Everything Works
 Visit the URL - you should see a working todo list with sample tasks. ✅
 
 ---

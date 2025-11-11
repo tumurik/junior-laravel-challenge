@@ -66,4 +66,26 @@ class TodoController extends Controller
         return redirect()->route('todos.index')
             ->with('success', 'Todo deleted successfully!');
     }
+
+    /**
+     * Create summary of completed tasks.
+     */
+    public function summary()
+    {
+        $todos = Todo::orderBy('created_at', 'desc')->get();
+
+        $completedTodosCount = $todos->where('completed', true)->count();
+        $pendingTodosCount = $todos->where('completed', false)->count();
+
+        return view('todos.summary', compact('todos', 'completedTodosCount', 'pendingTodosCount'));
+        // Get data from database
+        // You'll need to count todos, filter by status, and find todos due in the next 30 days.
+        //$todos = Todo::orderBy('created_at', 'desc')->get();
+
+        //Percentage Calculation
+        //How do you calculate what percentage of todos are completed? Sounds like a simple math, doesn't it?
+
+        // Return a view with that data
+        //return view('todos.summary', compact('todos'));
+    }
 }

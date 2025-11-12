@@ -11,9 +11,13 @@
         </div>
 
         <!-- Actions -->
-        <div class="actions-container">
+        <div class="actions-container gap-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTodoModal">
                 <i class="bi bi-plus-circle me-2"></i>Create New Todo
+            </button>
+
+            <button type="button" class="btn btn-primary" onclick=" window.location.href=' {{route('todos.summary')}} ' ">
+                <i class="bi bi-bar-chart-line me-2"></i>Check Summary
             </button>
         </div>
 

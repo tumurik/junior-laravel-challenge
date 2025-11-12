@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TodoController extends Controller
 {
@@ -15,6 +16,24 @@ class TodoController extends Controller
         $todos = Todo::orderBy('created_at', 'desc')->get();
 
         return view('todos.index', compact('todos'));
+    }
+
+    /**
+     * Create todo summary.
+     */
+    public function summary()
+    {
+        $completedTodosCount = Todo::where('completed', true)->count();
+        $pendingTodosCount = Todo::where('completed', false)->count();
+        $totalTodosCount = $completedTodosCount + $pendingTodosCount;
+
+        $completionPercentage = $totalTodosCount > 0 ? round(($completedTodosCount/$totalTodosCount)*100) : 0;
+
+        $currentDate = Carbon::now(config('app.timezone'))->startOfDay();
+        $endDate = $currentDate->copy()->addDays(30)->endOfDay();
+        $todosInMonthRange = Todo::whereBetween('due_date', [$currentDate, $endDate])->orderBy('created_at', 'desc')->get();
+        
+        return view('todos.summary', compact('totalTodosCount', 'completedTodosCount', 'pendingTodosCount', 'completionPercentage', 'todosInMonthRange'));
     }
 
     /**
@@ -30,7 +49,7 @@ class TodoController extends Controller
 
         Todo::create($validated);
 
-        return redirect()->route('todos.index')
+        return redirect()->back()
             ->with('success', 'Todo created successfully!');
     }
 
@@ -41,7 +60,7 @@ class TodoController extends Controller
     {
         $todo->update(['completed' => true]);
 
-        return redirect()->route('todos.index')
+        return redirect()->back()
             ->with('success', 'Todo marked as completed!');
     }
 
@@ -52,7 +71,7 @@ class TodoController extends Controller
     {
         $todo->update(['completed' => false]);
 
-        return redirect()->route('todos.index')
+        return redirect()->back()
             ->with('success', 'Todo marked as incomplete!');
     }
 
@@ -63,29 +82,8 @@ class TodoController extends Controller
     {
         $todo->delete();
 
-        return redirect()->route('todos.index')
+        return redirect()->back()
             ->with('success', 'Todo deleted successfully!');
     }
 
-    /**
-     * Create summary of completed tasks.
-     */
-    public function summary()
-    {
-        $todos = Todo::orderBy('created_at', 'desc')->get();
-
-        $completedTodosCount = $todos->where('completed', true)->count();
-        $pendingTodosCount = $todos->where('completed', false)->count();
-
-        return view('todos.summary', compact('todos', 'completedTodosCount', 'pendingTodosCount'));
-        // Get data from database
-        // You'll need to count todos, filter by status, and find todos due in the next 30 days.
-        //$todos = Todo::orderBy('created_at', 'desc')->get();
-
-        //Percentage Calculation
-        //How do you calculate what percentage of todos are completed? Sounds like a simple math, doesn't it?
-
-        // Return a view with that data
-        //return view('todos.summary', compact('todos'));
-    }
 }

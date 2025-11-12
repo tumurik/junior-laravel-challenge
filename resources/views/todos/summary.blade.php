@@ -7,36 +7,71 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">Summary</h1>
-            <p class="page-subtitle">Task summary</p>
+            <p class="page-subtitle">Todo statistics</p>
         </div>
 
         <!-- Main Content -->
 
-        <div>
-            <h2 class="page-title">Total number of todos - {{$todos->count()}}</h2>
-            <br></br>
-            <h2 class="page-title">Number of completed ( {{$completedTodosCount}} ) vs. pending todos ( {{$pendingTodosCount}} )</h2>
-            <br></br>
-            <h2 class="page-title">Completion percentage (as a progress bar or text)</h2>
-            <br></br>
-            <h2 class="page-title">List of todos due in the next 30 days</h2>
-            <br></br>
-            <h2 class="page-title">A button/link to access this page from the main todo list (for example in header or near "Create New Todo" button)</h2>
-            <br></br>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+
+                <h2 class="card-title mb-4">Todo Summary</h2>
+
+                <!-- Statistics -->
+
+                <div class="row text-center mb-4">
+                    <div class="col-md-4">
+                        <h3 class="text primary">{{$totalTodosCount}}</h3>
+                        <p class="text-muted">Total Todos</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text success">{{$completedTodosCount}}</h3>
+                        <p class="text-muted">Completed Todos</p>                            
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text warning">{{$pendingTodosCount}}</h3>
+                        <p class="text-muted">Pending Todos</p>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+
+                <h2 class="mb-4">Your Progress!</h2>
+                <div class="progress mb-4" role="progressbar" aria-label="Basic example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" style="width: {{ $completionPercentage }}%;">{{$completionPercentage}} %</div>
+                </div>
+
+            </div>
         </div>
 
+        <!-- Relevant Cards -->
+
+        <h3 class="page-title mb-4">List of todos due in the next 30 days</h3>
         <div>
-            @if($todos->count() > 0)
-                @foreach($todos as $todo)
-                    @include('partials.todo-card', ['todo' => $todo])
-                @endforeach
+            
+            @if($todosInMonthRange->count() > 0)
+                <div class="todos-list">
+                    @foreach($todosInMonthRange as $todo)
+                        @include('partials.todo-card', ['todo' => $todo])
+                    @endforeach
+                </div>
             @else
-                <p>No todos yet!</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <h2 class="empty-state-title">No todos yet</h2>
+                    <p class="empty-state-text">Start by creating your new todo to stay organized!</p>
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createTodoModal">
+                        <i class="bi bi-plus-circle me-2"></i>Create Your New Todo
+                    </button>
+                </div>
             @endif
         </div>
-        
-        
 
+
+    </div>
+        
     @if ($errors->any())
         @push('scripts')
             <script>
@@ -48,4 +83,5 @@
             </script>
         @endpush
     @endif
+    
 @endsection
